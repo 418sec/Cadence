@@ -1601,7 +1601,7 @@ class CadenceMainW(QMainWindow, ui_cadence.Ui_CadenceMainW):
             spawn(["%s/%s" % (base, tool), "&"])
 
         else:
-            spawn(["%s" % tool, "&"])
+            spawn([tool, "&"])
 
     def func_settings_changed(self, stype):
         if stype not in self.settings_changed_types:
