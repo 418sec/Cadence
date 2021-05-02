@@ -21,6 +21,7 @@
 
 import os
 import sys
+import subprocess
 from codecs import open as codecopen
 from unicodedata import normalize
 
@@ -312,3 +313,12 @@ def setIcons(self_, modes):
     if "misc" in modes:
         gGui.ui.act_quit.setIcon(getIcon("application-exit"))
         gGui.ui.act_configure.setIcon(getIcon("configure"))
+
+# ------------------------------------------------------------------------------------------------------------
+# Command execution
+
+def spawn(args, **kwargs):
+    """
+    Executes an OS command, waits for it to complete, returns exit code.
+    """
+    return subprocess.call(args, **kwargs)

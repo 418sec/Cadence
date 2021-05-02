@@ -38,6 +38,7 @@ import ui_cadence_tb_alsa
 import ui_cadence_tb_a2j
 import ui_cadence_tb_pa
 import ui_cadence_rwait
+from shared import spawn
 from shared_cadence import *
 from shared_canvasjack import *
 from shared_settings import *
@@ -585,9 +586,9 @@ class ForceRestartThread(QThread):
         # PulseAudio
         if GlobalSettings.value("Pulse2JACK/AutoStart", True, type=bool) and not isPulseAudioBridged():
             if GlobalSettings.value("Pulse2JACK/PlaybackModeOnly", False, type=bool):
-                os.system("cadence-pulse2jack -p")
+                spawn(["cadence-pulse2jack", "-p"])
             else:
-                os.system("cadence-pulse2jack")
+                spawn(["cadence-pulse2jack"])
 
         self.progressChanged.emit(100)
 
@@ -1590,17 +1591,17 @@ class CadenceMainW(QMainWindow, ui_cadence.Ui_CadenceMainW):
                 if python:
                     python += " "
 
-            cmd = "%s%s%s &" % (python, base, tool)
+            cmd = ["%s%s%s" % (python, base, tool), "&"]
 
             print(cmd)
-            os.system(cmd)
+            spawn(cmd)
 
         elif sys.argv[0].endswith("/cadence"):
             base = sys.argv[0].rsplit("/cadence", 1)[0]
-            os.system("%s/%s &" % (base, tool))
+            spawn(["%s/%s" % (base, tool), "&"])
 
         else:
-            os.system("%s &" % tool)
+            spawn(["%s" % tool, "&"])
 
     def func_settings_changed(self, stype):
         if stype not in self.settings_changed_types:
@@ -1790,13 +1791,13 @@ class CadenceMainW(QMainWindow, ui_cadence.Ui_CadenceMainW):
     @pyqtSlot()
     def slot_PulseAudioBridgeStart(self):
         if GlobalSettings.value("Pulse2JACK/PlaybackModeOnly", False, type=bool):
-            os.system("cadence-pulse2jack -p")
+            spawn(["cadence-pulse2jack", "-p"])
         else:
-            os.system("cadence-pulse2jack")
+            spawn(["cadence-pulse2jack"])
 
     @pyqtSlot()
     def slot_PulseAudioBridgeStop(self):
-        os.system("pulseaudio -k")
+        spawn(["pulseaudio", "-k"])
 
     @pyqtSlot()
     def slot_PulseAudioBridgeOptions(self):
@@ -2098,7 +2099,7 @@ class CadenceMainW(QMainWindow, ui_cadence.Ui_CadenceMainW):
             writeFile.write(REGFILE)
             writeFile.close()
 
-            os.system("regedit /tmp/cadence-wineasio.reg")
+            spawn(["regedit", "/tmp/cadence-wineasio.reg"])
 
         self.settings_changed_types = []
         self.frame_tweaks_settings.setVisible(False)

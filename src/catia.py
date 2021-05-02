@@ -20,6 +20,7 @@
 # Imports (Custom Stuff)
 
 import ui_catia
+from shared import spawn
 from shared_canvasjack import *
 from shared_settings import *
 
@@ -415,7 +416,7 @@ class CatiaMainW(AbstractCanvasJackClass):
                 portIdAlsaA = portRealNameA.split(" ", 2)[1]
                 portIdAlsaB = portRealNameB.split(" ", 2)[1]
 
-                if os.system("aconnect %s %s" % (portIdAlsaA, portIdAlsaB)) == 0:
+                if spawn(["aconnect", str(portIdAlsaA), str(portIdAlsaB)]) == 0:
                     self.canvas_connectPorts(portIdA, portIdB)
 
             elif portRealNameA and portRealNameB:
@@ -445,7 +446,7 @@ class CatiaMainW(AbstractCanvasJackClass):
                 portIdAlsaA = portRealNameA.split(" ", 2)[1]
                 portIdAlsaB = portRealNameB.split(" ", 2)[1]
 
-                if os.system("aconnect -d %s %s" % (portIdAlsaA, portIdAlsaB)) == 0:
+                if spawn(["aconnect", "-d", str(portIdAlsaA), str(portIdAlsaB)]) == 0:
                     self.canvas_disconnectPorts(portIdA, portIdB)
 
             elif portRealNameA and portRealNameB:
