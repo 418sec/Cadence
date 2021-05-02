@@ -157,11 +157,11 @@ class ClaudiaLauncher(QWidget, ui_claudia_launcher.Ui_ClaudiaLauncherW):
 
         syspath = sys.path[0]
         if os.path.exists(os.path.join(syspath, "..", "icons")):
-            os.system("cp -r '%s' '%s'" % (os.path.join(syspath, "..", "icons", "claudia-hicolor"), iconPath))
+            spawn(["cp", "-r", os.path.join(syspath, "..", "icons", "claudia-hicolor"), iconPath])
         elif os.path.exists(os.path.join(syspath, "..", "data", "icons")):
-            os.system("cp -r '%s' '%s'" % (os.path.join(syspath, "..", "data", "icons", "claudia-hicolor"), iconPath))
+            spawn(["cp", "-r", os.path.join(syspath, "..", "data", "icons", "claudia-hicolor"), iconPath])
 
-        os.system("sed -i 's/X-CURRENT-THEME-X/%s/' '%s'" % (self.m_lastThemeName, os.path.join(iconPath, "claudia-hicolor", "index.theme")))
+        spawn(["sed", "-i", "s/X-CURRENT-THEME-X/%s/" % (self.m_lastThemeName, ), "%s" % (os.path.join(iconPath, "claudia-hicolor", "index.theme"), )])
 
         self.ClaudiaIcons.addIconPath(iconPath)
         QIcon.setThemeName("claudia-hicolor")
@@ -232,7 +232,7 @@ class ClaudiaLauncher(QWidget, ui_claudia_launcher.Ui_ClaudiaLauncherW):
         if not (app and binary):
             return
 
-        os.system("cd '%s' && %s &" % (self.callback_getProjectFolder(), binary))
+        spawn([binary, "&"], cwd=self.callback_getProjectFolder())
 
     def addAppToLADISH(self):
         app, binary = self.getSelectedAppAndBinary()
@@ -315,8 +315,8 @@ class ClaudiaLauncher(QWidget, ui_claudia_launcher.Ui_ClaudiaLauncherW):
             tmplte_file   = os.path.join(tmplte_folder, "Ardour2_%i.ardour" % rand_check)
             os.mkdir(tmplte_folder)
 
-            os.system("cp '%s' '%s'" % (os.path.join(tmplte_dir, "Ardour2", "Ardour2.ardour"), tmplte_file))
-            os.system("cp '%s' '%s'" % (os.path.join(tmplte_dir, "Ardour2", "instant.xml"), tmplte_folder))
+            spawn(["cp", os.path.join(tmplte_dir, "Ardour2", "Ardour2.ardour"), tmplte_file])
+            spawn(["cp", os.path.join(tmplte_dir, "Ardour2", "instant.xml"), tmplte_folder])
             os.mkdir(os.path.join(tmplte_folder, "analysis"))
             os.mkdir(os.path.join(tmplte_folder, "dead_sounds"))
             os.mkdir(os.path.join(tmplte_folder, "export"))
@@ -334,8 +334,8 @@ class ClaudiaLauncher(QWidget, ui_claudia_launcher.Ui_ClaudiaLauncherW):
             tmplte_file   = os.path.join(tmplte_folder, "%s.ardour" % projName)
             os.mkdir(tmplte_folder)
 
-            os.system("cp '%s' '%s'" % (os.path.join(tmplte_dir, "Ardour3", "Ardour3.ardour"), tmplte_file))
-            os.system("cp '%s' '%s'" % (os.path.join(tmplte_dir, "Ardour3", "instant.xml"), tmplte_folder))
+            spawn(["cp", os.path.join(tmplte_dir, "Ardour3", "Ardour3.ardour"), tmplte_file])
+            spawn(["cp", os.path.join(tmplte_dir, "Ardour3", "instant.xml"), tmplte_folder])
             os.mkdir(os.path.join(tmplte_folder, "analysis"))
             os.mkdir(os.path.join(tmplte_folder, "dead"))
             os.mkdir(os.path.join(tmplte_folder, "export"))
@@ -356,7 +356,7 @@ class ClaudiaLauncher(QWidget, ui_claudia_launcher.Ui_ClaudiaLauncherW):
         elif binary == "hydrogen":
             tmplte_file = os.path.join(proj_folder, "Hydrogen_%i.h2song" % rand_check)
 
-            os.system("cp '%s' '%s'" % (os.path.join(tmplte_dir, "Hydrogen.h2song"), tmplte_file))
+            spawn(["cp", os.path.join(tmplte_dir, "Hydrogen.h2song"), tmplte_file])
 
             tmplte_cmd  = binary
             tmplte_cmd += " -s '%s'" % (os.path.basename(tmplte_file) if self.callback_isLadishRoom() else tmplte_file)
@@ -369,7 +369,7 @@ class ClaudiaLauncher(QWidget, ui_claudia_launcher.Ui_ClaudiaLauncherW):
         elif binary == "jacker":
             tmplte_file = os.path.join(proj_folder, "Jacker_%i.jsong" % rand_check)
 
-            os.system("cp '%s' '%s'" % (os.path.join(tmplte_dir, "Jacker.jsong"), tmplte_file))
+            spawn(["cp", os.path.join(tmplte_dir, "Jacker.jsong"), tmplte_file])
 
             tmplte_cmd  = binary
             tmplte_cmd += " '%s'" % (os.path.basename(tmplte_file) if self.callback_isLadishRoom() else tmplte_file)
@@ -383,7 +383,7 @@ class ClaudiaLauncher(QWidget, ui_claudia_launcher.Ui_ClaudiaLauncherW):
         elif binary == "lmms":
             tmplte_file = os.path.join(proj_folder, "LMMS_%i.mmp" % rand_check)
 
-            os.system("cp '%s' '%s'" % (os.path.join(tmplte_dir, "LMMS.mmp"), tmplte_file))
+            spawn(["cp", os.path.join(tmplte_dir, "LMMS.mmp"), tmplte_file])
 
             tmplte_cmd  = binary
             tmplte_cmd += " '%s'" % (os.path.basename(tmplte_file) if self.callback_isLadishRoom() else tmplte_file)
@@ -394,7 +394,7 @@ class ClaudiaLauncher(QWidget, ui_claudia_launcher.Ui_ClaudiaLauncherW):
         elif binary == "muse":
             tmplte_file = os.path.join(proj_folder, "MusE_%i.med" % rand_check)
 
-            os.system("cp '%s' '%s'" % (os.path.join(tmplte_dir, "MusE.med"), tmplte_file))
+            spawn(["cp", os.path.join(tmplte_dir, "MusE.med"), tmplte_file])
 
             tmplte_cmd  = binary
             tmplte_cmd += " '%s'" % (os.path.basename(tmplte_file) if self.callback_isLadishRoom() else tmplte_file)
@@ -402,7 +402,7 @@ class ClaudiaLauncher(QWidget, ui_claudia_launcher.Ui_ClaudiaLauncherW):
         elif binary == "non-sequencer":
             tmplte_file_r = os.path.join(proj_folder, "Non-Sequencer_%i.non" % rand_check)
 
-            os.system("cp '%s' '%s'" % (os.path.join(tmplte_dir, "Non-Sequencer.non"), tmplte_file_r))
+            spawn(["cp", os.path.join(tmplte_dir, "Non-Sequencer.non"), tmplte_file_r])
 
             tmplte_cmd  = binary
             tmplte_cmd += " '%s'" % (os.path.basename(tmplte_file_r) if self.callback_isLadishRoom() else tmplte_file_r)
@@ -411,12 +411,12 @@ class ClaudiaLauncher(QWidget, ui_claudia_launcher.Ui_ClaudiaLauncherW):
             tmplte_folder = os.path.join(proj_folder, "Non-Timeline_%i" % rand_check)
             os.mkdir(tmplte_folder)
 
-            os.system("cp '%s' '%s'" % (os.path.join(tmplte_dir, "Non-Timeline", "history"), tmplte_folder))
-            os.system("cp '%s' '%s'" % (os.path.join(tmplte_dir, "Non-Timeline", "info"), tmplte_folder))
+            spawn(["cp", os.path.join(tmplte_dir, "Non-Timeline", "history"), tmplte_folder])
+            spawn(["cp", os.path.join(tmplte_dir, "Non-Timeline", "info"), tmplte_folder])
             os.mkdir(os.path.join(tmplte_folder, "sources"))
 
-            os.system('sed -i "s/X_SR_X-CLAUDIA-X_SR_X/%s/" "%s"' % (proj_srate, os.path.join(tmplte_folder, "info")))
-            os.system('sed -i "s/X_BPM_X-CLAUDIA-X_BPM_X/%s/" "%s"' % (proj_bpm, os.path.join(tmplte_folder, "history")))
+            spawn(["sed", "-i", "s/X_SR_X-CLAUDIA-X_SR_X/%s/" % (proj_srate, ), os.path.join(tmplte_folder, "info")])
+            spawn(["sed", "-i", "s/X_BPM_X-CLAUDIA-X_BPM_X/%s/" % (proj_bpm, ), os.path.join(tmplte_folder, "history")])
 
             tmplte_cmd  = binary
             tmplte_cmd += " '%s'" % (os.path.basename(tmplte_folder) if self.callback_isLadishRoom() else tmplte_folder)
@@ -424,7 +424,7 @@ class ClaudiaLauncher(QWidget, ui_claudia_launcher.Ui_ClaudiaLauncherW):
         elif binary == "qtractor":
             tmplte_file = os.path.join(proj_folder, "Qtractor_%i.qtr" % rand_check)
 
-            os.system("cp '%s' '%s'" % (os.path.join(tmplte_dir, "Qtractor.qtr"), tmplte_file))
+            spawn(["cp", os.path.join(tmplte_dir, "Qtractor.qtr"), tmplte_file])
 
             tmplte_cmd  = binary
             tmplte_cmd += " '%s'" % (os.path.basename(tmplte_file) if self.callback_isLadishRoom() else tmplte_file)
@@ -433,7 +433,7 @@ class ClaudiaLauncher(QWidget, ui_claudia_launcher.Ui_ClaudiaLauncherW):
         elif binary == "rosegarden":
             tmplte_file = os.path.join(proj_folder, "Rosegarden_%i.rg" % rand_check)
 
-            os.system("cp '%s' '%s'" % (os.path.join(tmplte_dir, "Rosegarden.rg"), tmplte_file))
+            spawn(["cp", os.path.join(tmplte_dir, "Rosegarden.rg"), tmplte_file])
 
             tmplte_cmd  = binary
             tmplte_cmd += " '%s'" % (os.path.basename(tmplte_file) if self.callback_isLadishRoom() else tmplte_file)
@@ -442,7 +442,7 @@ class ClaudiaLauncher(QWidget, ui_claudia_launcher.Ui_ClaudiaLauncherW):
         elif binary == "seq24":
             tmplte_file_r = os.path.join(proj_folder, "Seq24_%i.midi" % rand_check)
 
-            os.system("cp '%s' '%s'" % (os.path.join(tmplte_dir, "Seq24.midi"), tmplte_file_r))
+            spawn(["cp", os.path.join(tmplte_dir, "Seq24.midi"), tmplte_file_r])
 
             tmplte_cmd  = binary
             tmplte_cmd += " '%s'" % (os.path.basename(tmplte_file_r) if self.callback_isLadishRoom() else tmplte_file_r)
@@ -451,7 +451,7 @@ class ClaudiaLauncher(QWidget, ui_claudia_launcher.Ui_ClaudiaLauncherW):
         elif binary == "calfjackhost":
             tmplte_file = os.path.join(proj_folder, "CalfJackHost_%i" % rand_check)
 
-            os.system("cp '%s' '%s'" % (os.path.join(tmplte_dir, "CalfJackHost"), tmplte_file))
+            spawn(["cp", os.path.join(tmplte_dir, "CalfJackHost"), tmplte_file])
 
             tmplte_cmd  = binary
             tmplte_cmd += " --load '%s'" % (os.path.basename(tmplte_file) if self.callback_isLadishRoom() else tmplte_file)
@@ -460,7 +460,7 @@ class ClaudiaLauncher(QWidget, ui_claudia_launcher.Ui_ClaudiaLauncherW):
         elif binary == "carla":
             tmplte_file = os.path.join(proj_folder, "Carla_%i.carxp" % rand_check)
 
-            os.system("cp '%s' '%s'" % (os.path.join(tmplte_dir, "Carla.carxp"), tmplte_file))
+            spawn(["cp", os.path.join(tmplte_dir, "Carla.carxp"), tmplte_file])
 
             tmplte_cmd  = binary
             tmplte_cmd += " '%s'" % (os.path.basename(tmplte_file) if self.callback_isLadishRoom() else tmplte_file)
@@ -469,7 +469,7 @@ class ClaudiaLauncher(QWidget, ui_claudia_launcher.Ui_ClaudiaLauncherW):
         elif binary == "jack-rack":
             tmplte_file = os.path.join(proj_folder, "Jack-Rack_%i.xml" % rand_check)
 
-            os.system("cp '%s' '%s'" % (os.path.join(tmplte_dir, "Jack-Rack.xml"), tmplte_file))
+            spawn(["cp", os.path.join(tmplte_dir, "Jack-Rack.xml"), tmplte_file])
 
             tmplte_cmd  = binary
             tmplte_cmd += " '%s'" % (os.path.basename(tmplte_file) if self.callback_isLadishRoom() else tmplte_file)
@@ -477,7 +477,7 @@ class ClaudiaLauncher(QWidget, ui_claudia_launcher.Ui_ClaudiaLauncherW):
         elif binary == "qsampler":
             tmplte_file = os.path.join(proj_folder, "Qsampler_%i.lscp" % rand_check)
 
-            os.system("cp '%s' '%s'" % (os.path.join(tmplte_dir, "Qsampler.lscp"), tmplte_file))
+            spawn(["cp", os.path.join(tmplte_dir, "Qsampler.lscp"), tmplte_file])
 
             tmplte_cmd  = binary
             tmplte_cmd += " '%s'" % (os.path.basename(tmplte_file) if self.callback_isLadishRoom() else tmplte_file)
@@ -485,7 +485,7 @@ class ClaudiaLauncher(QWidget, ui_claudia_launcher.Ui_ClaudiaLauncherW):
         elif binary == "jack-mixer":
             tmplte_file = os.path.join(proj_folder, "Jack-Mixer_%i.xml" % rand_check)
 
-            os.system("cp '%s' '%s'" % (os.path.join(tmplte_dir, "Jack-Mixer.xml"), tmplte_file))
+            spawn(["cp", os.path.join(tmplte_dir, "Jack-Mixer.xml"), tmplte_file])
 
             tmplte_cmd  = binary
             tmplte_cmd += " -c '%s'" % (os.path.basename(tmplte_file) if self.callback_isLadishRoom() else tmplte_file)
@@ -495,9 +495,9 @@ class ClaudiaLauncher(QWidget, ui_claudia_launcher.Ui_ClaudiaLauncherW):
             return False
 
         if tmplte_file is not None:
-            os.system('sed -i "s|X_SR_X-CLAUDIA-X_SR_X|%s|" "%s"' % (proj_srate, tmplte_file))
-            os.system('sed -i "s|X_BPM_X-CLAUDIA-X_BPM_X|%s|" "%s"' % (proj_bpm, tmplte_file))
-            os.system('sed -i "s|X_FOLDER_X-CLAUDIA-X_FOLDER_X|%s|" "%s"' % (proj_folder.replace("|", "\|").replace("$", "\$"), tmplte_file))
+            spawn(["sed", "-i", "s|X_SR_X-CLAUDIA-X_SR_X|%s|" % (proj_srate, ), tmplte_file])
+            spawn(["sed", "-i", "s|X_BPM_X-CLAUDIA-X_BPM_X|%s|" % (proj_bpm, ), tmplte_file])
+            spawn(["sed", "-i", "s|X_FOLDER_X-CLAUDIA-X_FOLDER_X|%s|" % (proj_folder.replace("|", "\|").replace("$", "\$"), ), tmplte_file])
 
         appBus = self.callback_getAppBus()
         appBus.RunCustom2(False, tmplte_cmd, app, tmplte_lvl)

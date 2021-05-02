@@ -108,7 +108,7 @@ def startAlsaAudioLoopBridge():
     channels = GlobalSettings.value("ALSA-Audio/BridgeChannels", 2, type=int)
     useZita  = bool(GlobalSettings.value("ALSA-Audio/BridgeTool", "alsa_in", type=str) == "zita")
 
-    os.system("cadence-aloop-daemon --channels=%i %s &" % (channels, "--zita" if useZita else ""))
+    spawn(["cadence-aloop-daemon", "--channels=%i" % (channels,), "--zita" if useZita else "", "&"])
 
 # ------------------------------------------------------------------------------------------------------------
 # Stop all audio processes, used for force-restart
